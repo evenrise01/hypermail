@@ -37,6 +37,7 @@ export class Account {
     deltaToken?: string;
     pageToken?: string;
   }) {
+    console.log('getUpdatedEmails', { deltaToken, pageToken });
     let params: Record<string, string> = {};
     if (deltaToken) params.deltaToken = deltaToken;
     if (pageToken) params.pageToken = pageToken;
@@ -64,12 +65,15 @@ export class Account {
         syncResponse = await this.startSync();
       }
 
+      console.log('Sync is ready. Tokens:', syncResponse);
+
       //get the delta token/bookmark from aurinko
       let storedDeltaToken: string = syncResponse.syncUpdatedToken;
 
       let updatedResponse = await this.getUpdatedEmails({
         deltaToken: storedDeltaToken,
       });
+      console.log('updatedResponse', updatedResponse)
 
       if (updatedResponse.nextDeltaToken) {
         //If there is a next Delta token, means that the sync has been completed

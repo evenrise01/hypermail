@@ -15,11 +15,11 @@ export const getAurinkoAuthUrl = async (
   const params = new URLSearchParams({
     clientId: process.env.AURINKO_CLIENT_ID as string,
     serviceType,
-    scope: "Mail.Read Mail.ReadWrite Mail.Send Mail.Drafts Mail.All", //Scope is delimited by a whitespace
+    scopes: "Mail.Read Mail.ReadWrite Mail.Send Mail.Drafts Mail.All", //Scope is delimited by a whitespace
     responseType: "code",
     returnUrl: `${process.env.NEXT_PUBLIC_URL}/api/aurinko/callback`,
   });
-  console.log(params.toString())
+  console.log("Params: ", params.toString())
   return `https://api.aurinko.io/v1/auth/authorize?${params.toString()}`;
 };
 
@@ -35,7 +35,7 @@ export const exchangeCodeForAccessToken = async (code: string) => {
         },
       },
     );
-
+      console.log("Exchange code token response:", response.data)
     return response.data as {
       accountId: number;
       accessToken: string;
